@@ -3726,6 +3726,7 @@
                             </div>
 
                             <!-- Required Slider & Textarea -->
+
                             <div class="form-group full-width budget-slider-wrap">
                                 <div class="budget-value-display">
                                     <span class="form-label">Estimated Budget Range *</span>
@@ -3733,17 +3734,32 @@
                                 </div>
                                 <input type="range" id="client-budget" class="budget-slider" min="500" max="10000" step="500" value="2500">
                             </div>
+
                             <div class="form-group full-width">
                                 <label for="client-description" class="form-label">Project Description *</label>
                                 <textarea id="client-description" class="form-input" placeholder="Tell me about your business goals, target pages, and timeline constraints..." required></textarea>
                             </div>
 
                             <div class="form-group full-width" style="display: flex; flex-direction: row; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                                <button type="submit" class="btn btn-primary btn-submit" id="form-submit-button" style="flex: 1;">
-                  <span>Send Proposal Request <i class="fa-solid fa-paper-plane"></i></span>
-                  <i class="fa-solid fa-spinner"></i>
-                </button>
-                                <a href="https://t.me/itsayushhelpsuppoet" target="_blank" class="btn btn-secondary" style="flex: 1; min-width: 200px;"><i class="fa-brands fa-telegram"></i> Ask Questions on Telegram</a>
+
+                                <!-- Send Proposal Request: Opens Telegram -->
+                                <a href="https://t.me/itsayushhelpsuppoet"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-primary btn-submit"
+                                   style="flex: 1; text-align: center; text-decoration: none;">
+                                    <span>Send Proposal Request <i class="fa-solid fa-paper-plane"></i></span>
+                                </a>
+
+                                <!-- Ask Questions on Telegram -->
+                                <a href="https://t.me/itsayushhelpsuppoet"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-secondary"
+                                   style="flex: 1; min-width: 200px; text-align: center; text-decoration: none;">
+                                    <i class="fa-brands fa-telegram"></i> Ask Questions on Telegram
+                                </a>
+
                             </div>
                         </div>
                     </form>
