@@ -37,9 +37,7 @@
     <!-- Three.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Firebase Compat SDK CDNs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase uses the modular CDN SDK in the main script below. -->
 
     <!-- Structured Data Schema -->
     <script type="application/ld+json">
@@ -3896,12 +3894,14 @@
     <!-- --------------------------------------------------
        JAVASCRIPT & THREE.JS LOGIC
        -------------------------------------------------- */ -->
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
         /* --------------------------------------------------
-               FIREBASE CONFIGURATION & INITIALIZATION
-               -------------------------------------------------- */
-        // Instructions: Replace these configuration keys with your own Firebase Project details
-        // Ensure you also enable Email/Password Authentication in your Firebase console.
+           FIREBASE CONFIGURATION & INITIALIZATION
+           -------------------------------------------------- */
         const firebaseConfig = {
             apiKey: "AIzaSyBIaZgmLMopOngK89vH2Al0XUP2C8G62VI",
             authDomain: "its-ayush.firebaseapp.com",
@@ -3914,17 +3914,12 @@
 
         let firestoreDb = null;
         let isFirebaseMocked = true;
-
-        // Graceful check for config replacements
         try {
-            if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "REPLACE_WITH_YOUR_API_KEY") {
-                firebase.initializeApp(firebaseConfig);
-                firestoreDb = firebase.firestore();
-                isFirebaseMocked = false;
-                console.log("Firebase Firestore linked successfully.");
-            } else {
-                console.error("Firebase configuration is missing. Contact form submissions will not be stored in Firestore.");
-            }
+            const app = initializeApp(firebaseConfig);
+            firestoreDb = getFirestore(app);
+            isFirebaseMocked = false;
+            try { getAnalytics(app); } catch (analyticsError) { console.warn("Firebase Analytics unavailable:", analyticsError); }
+            console.log("Firebase Firestore initialized.");
         } catch (e) {
             console.error("Failed to initialize Firebase:", e);
         }
@@ -4476,7 +4471,7 @@
             const now = new Date();
             const leadId = "LD-" + Math.random().toString(36).substring(2, 9).toUpperCase();
             const status = "New";
-            const submittedAt = isFirebaseMocked ? now.toISOString() : firebase.firestore.FieldValue.serverTimestamp();
+            const submittedAt = isFirebaseMocked ? now.toISOString() : serverTimestamp();
 
             const date = now.toISOString().split('T')[0]; // YYYY-MM-DD
             const time = now.toTimeString().split(' ')[0]; // HH:MM:SS
@@ -4501,7 +4496,7 @@
             try {
                 if (!isFirebaseMocked && firestoreDb) {
                     // Store directly inside Google Cloud Firestore Database
-                    await firestoreDb.collection("leads").doc(leadId).set(leadData);
+                    await addDoc(collection(firestoreDb, "leads"), leadData);
                     console.log("Lead successfully uploaded to Firestore:", leadId);
                 } else {
                     throw new Error("Firebase is not connected. Check the Firebase configuration and Firestore setup.");
@@ -4521,7 +4516,7 @@
                 console.error("Database submission write error:", err);
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
-                alert("Failed to submit request to database:\n" + err.message + "\n\nIf you see permission or API errors, please verify Firestore is enabled and its security rules allow writes.");
+                alert("Failed to submit request to database:\n" + err.message + "\n\nIn Firebase Console, open Firestore Database > Rules, publish rules that allow valid CREATE requests to the 'leads' collection, and confirm Firestore is enabled.");
             }
         });
 
