@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /firestore.rules
+Disallow: /firestore.rules.example
+
+Sitemap: https://its-ayush.in/sitemap.xml

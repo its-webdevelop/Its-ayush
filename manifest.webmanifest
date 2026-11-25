@@ -1,0 +1,10 @@
+{
+  "name": "0xnullex — Web Design & Development",
+  "short_name": "0xnullex",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#070706",
+  "description": "Independent Web Design & Development Studio.",
+  "icons": [{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
